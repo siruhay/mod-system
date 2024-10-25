@@ -1,0 +1,11 @@
+{
+    "authorEmail": "monoland.soft@gmail.com",
+    "authorName": "monoland",
+    "authorVendor": "siruhay",
+    "connection": "platform",
+    "name": "System",
+    "namespace": "Module",
+    "priority": 1,
+    "disabled": false,
+    "providers": "Module\\System\\Providers\\SystemServiceProvider"   
+}

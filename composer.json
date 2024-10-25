@@ -1,0 +1,32 @@
+{
+	"name": "siruhay/mod-system",
+	"description": "The siruhay module module",
+	"authors": [
+		{
+			"name": "monoland",
+			"email": "monoland.soft@gmail.com"
+		}
+	],
+	"require": {
+		"php": "^8.0.2",
+		"kalnoy/nestedset": "*",
+		"laravel/fortify": "^1.21",
+		"laravel/horizon": "^5.26",
+		"league/flysystem-aws-s3-v3": "^3.28",
+		"maatwebsite/excel": "^3.1",
+		"guzzlehttp/guzzle": "^7.2",
+		"siruhay/platform": "@dev"
+	},
+	"autoload": {
+		"files": [
+            "src/Supports/helpers.php"
+        ],
+
+		"psr-4": {
+			"Module\\System\\": "src/",
+			"ModuleSystem\\Seeders\\": "database/seeders"
+		}
+	},
+	"minimum-stability": "stable",
+	"prefer-stable": true
+}
