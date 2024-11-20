@@ -472,24 +472,20 @@ class SystemUser extends Authenticatable
     }
 
     /**
-     * createUserFromBiodata function
+     * createUserFromEvent function
      *
-     * @param Model $biodata
+     * @param Model $model
      * @return void
      */
-    public static function createUserFromBiodata(Model $biodata)
+    public static function createUserFromEvent(Model $model)
     {
-        if ($biodata->user) {
-            return $biodata->user;
-        }
-
         try {
             $model = new static;
-            $model->name = $biodata->name;
-            $model->email = $biodata->id;
-            $model->password = Hash::make(env('DEFAULT_PASSWORD', 'BantenMantap'));
+            $model->name = $model->name;
+            $model->email = $model->slug;
+            $model->password = Hash::make(env('DEFAULT_PASSWORD', 'SiruhayMantab'));
 
-            $biodata->user()->save($model);
+            $model->user()->save($model);
 
             return $model;
         } catch (\Exception $e) {
