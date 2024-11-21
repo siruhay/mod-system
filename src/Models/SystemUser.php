@@ -477,15 +477,15 @@ class SystemUser extends Authenticatable
      * @param Model $model
      * @return void
      */
-    public static function createUserFromEvent(Model $model)
+    public static function createUserFromEvent(Model $source)
     {
         try {
             $model = new static;
-            $model->name = $model->name;
-            $model->email = $model->slug;
+            $model->name = $source->name;
+            $model->email = $source->slug;
             $model->password = Hash::make(env('DEFAULT_PASSWORD', 'SiruhayMantab'));
 
-            $model->user()->save($model);
+            $source->user()->save($model);
 
             return $model;
         } catch (\Exception $e) {
@@ -499,13 +499,27 @@ class SystemUser extends Authenticatable
      * @param [type] $model
      * @return void
      */
-    public static function updateAbility($model)
+    public static function updateAbility($model, $source)
     {
         if (!$model) {
             return;
         }
 
-        if ($role = SystemRole::with(['abilities'])->firstWhere('slug', 'pegawai')) {
+        $rolemode = null;
+
+        switch ($source->position_id) {
+            case 16:
+                # KETUA | chairman
+                $rolemode = 'chairman';
+                break;
+
+            default:
+                # member
+                $rolemode = 'member';
+                break;
+        }
+
+        if ($role = SystemRole::with(['abilities'])->firstWhere('slug', $rolemode)) {
             foreach ($role->abilities as $ability) {
                 if (!$model->hasLicenseAs($ability->name)) {
                     $model->addLicense($ability->name);

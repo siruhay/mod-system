@@ -27,7 +27,7 @@ class CheckUserUpdate
         }
 
         /** UPDATE ABILITY */
-        SystemUser::updateAbility($user);
+        SystemUser::updateAbility($user, $member);
     }
 
     /**
@@ -48,7 +48,7 @@ class CheckUserUpdate
         }
 
         /** UPDATE ABILITY */
-        SystemUser::updateAbility($user);
+        SystemUser::updateAbility($user, $official);
     }
 
     /**
