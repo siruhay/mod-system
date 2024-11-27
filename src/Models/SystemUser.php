@@ -4,6 +4,9 @@ namespace Module\System\Models;
 
 use Illuminate\Http\Request;
 use Laravel\Sanctum\HasApiTokens;
+use Module\System\Traits\CanLike;
+use Module\System\Traits\CanRate;
+use Module\System\Traits\CanVote;
 use Module\System\Traits\HasMeta;
 use Illuminate\Support\Facades\DB;
 use Module\System\Traits\Auditable;
@@ -25,6 +28,9 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 class SystemUser extends Authenticatable
 {
     use Auditable;
+    use CanLike;
+    use CanRate;
+    use CanVote;
     use Filterable;
     use HasApiTokens;
     use HasMeta;
