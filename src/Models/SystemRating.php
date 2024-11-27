@@ -2,24 +2,11 @@
 
 namespace Module\System\Models;
 
-use Illuminate\Http\Request;
-use Module\System\Traits\HasMeta;
-use Illuminate\Support\Facades\DB;
-use Module\System\Traits\Filterable;
-use Module\System\Traits\Searchable;
-use Module\System\Traits\HasPageSetup;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Module\System\Http\Resources\RatingResource;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class SystemRating extends Model
 {
-    use Filterable;
-    use HasMeta;
-    use HasPageSetup;
-    use Searchable;
-    use SoftDeletes;
-
     /**
      * The connection name for the model.
      *
@@ -42,153 +29,22 @@ class SystemRating extends Model
     protected $roles = ['system-rating'];
 
     /**
-     * The attributes that should be cast to native types.
+     * model function
      *
-     * @var array<string, string>
+     * @return MorphTo
      */
-    protected $casts = [
-        'meta' => 'array'
-    ];
-
-    /**
-     * The default key for the order.
-     *
-     * @var string
-     */
-    protected $defaultOrder = 'name';
-
-    /**
-     * The model store method
-     *
-     * @param Request $request
-     * @return void
-     */
-    public static function storeRecord(Request $request)
+    public function model(): MorphTo
     {
-        $model = new static();
-
-        DB::connection($model->connection)->beginTransaction();
-
-        try {
-            // ...
-            $model->save();
-
-            DB::connection($model->connection)->commit();
-
-            return new RatingResource($model);
-        } catch (\Exception $e) {
-            DB::connection($model->connection)->rollBack();
-
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        return $this->morphTo();
     }
 
     /**
-     * The model update method
+     * rateable function
      *
-     * @param Request $request
-     * @param [type] $model
-     * @return void
+     * @return MorphTo
      */
-    public static function updateRecord(Request $request, $model)
+    public function rateable(): MorphTo
     {
-        DB::connection($model->connection)->beginTransaction();
-
-        try {
-            // ...
-            $model->save();
-
-            DB::connection($model->connection)->commit();
-
-            return new RatingResource($model);
-        } catch (\Exception $e) {
-            DB::connection($model->connection)->rollBack();
-
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ], 500);
-        }
-    }
-
-    /**
-     * The model delete method
-     *
-     * @param [type] $model
-     * @return void
-     */
-    public static function deleteRecord($model)
-    {
-        DB::connection($model->connection)->beginTransaction();
-
-        try {
-            $model->delete();
-
-            DB::connection($model->connection)->commit();
-
-            return new RatingResource($model);
-        } catch (\Exception $e) {
-            DB::connection($model->connection)->rollBack();
-
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ], 500);
-        }
-    }
-
-    /**
-     * The model restore method
-     *
-     * @param [type] $model
-     * @return void
-     */
-    public static function restoreRecord($model)
-    {
-        DB::connection($model->connection)->beginTransaction();
-
-        try {
-            $model->restore();
-
-            DB::connection($model->connection)->commit();
-
-            return new RatingResource($model);
-        } catch (\Exception $e) {
-            DB::connection($model->connection)->rollBack();
-
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ], 500);
-        }
-    }
-
-    /**
-     * The model destroy method
-     *
-     * @param [type] $model
-     * @return void
-     */
-    public static function destroyRecord($model)
-    {
-        DB::connection($model->connection)->beginTransaction();
-
-        try {
-            $model->forceDelete();
-
-            DB::connection($model->connection)->commit();
-
-            return new RatingResource($model);
-        } catch (\Exception $e) {
-            DB::connection($model->connection)->rollBack();
-
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        return $this->morphTo();
     }
 }

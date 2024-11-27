@@ -9,6 +9,7 @@ use Laravel\Sanctum\Sanctum;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
+use Module\System\Supports\LaravelRating;
 use Illuminate\Support\Facades\RateLimiter;
 use Module\System\Actions\Fortify\CreateNewUser;
 use Module\System\Models\SystemPersonalAccessToken;
@@ -63,6 +64,10 @@ class SystemServiceProvider extends ServiceProvider
     {
         $this->app->register(EventServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
+
+        $this->app->bind('laravelRating', function () {
+            return new LaravelRating();
+        });
     }
 
     /**
