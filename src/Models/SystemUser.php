@@ -9,6 +9,7 @@ use Module\System\Traits\CanRate;
 use Module\System\Traits\CanVote;
 use Module\System\Traits\HasMeta;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Module\System\Traits\Auditable;
 use Illuminate\Support\Facades\Hash;
 use Module\System\Traits\Filterable;
@@ -18,13 +19,13 @@ use Illuminate\Support\Facades\Cache;
 use Module\System\Traits\Impersonate;
 use Module\System\Traits\HasPageSetup;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Support\Facades\Artisan;
 
 class SystemUser extends Authenticatable
 {
@@ -516,7 +517,7 @@ class SystemUser extends Authenticatable
 
         if ($source->position_id) {
             switch ($source->position_id) {
-                case 16:
+                case 19:
                     # KETUA | chairman
                     $rolemode = 'chairman';
                     break;
