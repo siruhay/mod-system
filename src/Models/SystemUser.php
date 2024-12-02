@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Support\Facades\Artisan;
 
 class SystemUser extends Authenticatable
 {
@@ -554,6 +555,8 @@ class SystemUser extends Authenticatable
                 }
             }
         }
+
+        Artisan::call('cache:clear');
     }
 
     /**
