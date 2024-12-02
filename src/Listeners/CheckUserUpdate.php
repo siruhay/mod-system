@@ -4,18 +4,19 @@ namespace Module\System\Listeners;
 
 use Illuminate\Events\Dispatcher;
 use Module\System\Models\SystemUser;
-use Module\Foundation\Events\MemberUpdated;
-use Module\Foundation\Events\OfficialUpdated;
+use Module\Foundation\Events\TrainingMemberUpdated;
+use Module\Training\Events\TrainingCommitteeUpdate;
+use Module\Foundation\Events\TrainingOfficialUpdated;
 
 class CheckUserUpdate
 {
     /**
      * handleMemberUpdate function
      *
-     * @param MemberUpdated $event
+     * @param TrainingMemberUpdated $event
      * @return void
      */
-    public function handleMemberUpdate(MemberUpdated $event): void
+    public function handleMemberUpdate(TrainingMemberUpdated $event): void
     {
         /** GET CURRENT MODEL */
         $member = $event->model;
@@ -31,12 +32,12 @@ class CheckUserUpdate
     }
 
     /**
-     * handleMemberUpdate function
+     * handleOfficialUpdate function
      *
-     * @param MemberUpdated $event
+     * @param TrainingOfficialUpdated $event
      * @return void
      */
-    public function handleOfficialUpdate(OfficialUpdated $event): void
+    public function handleOfficialUpdate(TrainingOfficialUpdated $event): void
     {
         /** GET CURRENT MODEL */
         $official = $event->model;
@@ -52,6 +53,27 @@ class CheckUserUpdate
     }
 
     /**
+     * handleTrainingCommitteeUpdate function
+     *
+     * @param TrainingCommitteeUpdate $event
+     * @return void
+     */
+    public function handleTrainingCommitteeUpdate(TrainingCommitteeUpdate $event): void
+    {
+        /** GET CURRENT MODEL */
+        $committee = $event->model;
+
+        /** CHECK EXISTS */
+        if (!$user = SystemUser::firstWhere('email', $committee->slug)) {
+            /** CREATE NEW USER */
+            $user = SystemUser::createUserFromEvent($committee);
+        }
+
+        /** UPDATE ABILITY */
+        SystemUser::updateAbility($user, $committee);
+    }
+
+    /**
      * subscribe function
      *
      * @param Dispatcher $events
@@ -60,41 +82,18 @@ class CheckUserUpdate
     public function subscribe(Dispatcher $events): void
     {
         $events->listen(
-            MemberUpdated::class,
+            TrainingMemberUpdated::class,
             [CheckUserUpdate::class, 'handleMemberUpdate']
         );
 
         $events->listen(
-            OfficialUpdated::class,
+            TrainingOfficialUpdated::class,
             [CheckUserUpdate::class, 'handleOfficialUpdate']
         );
+
+        $events->listen(
+            TrainingCommitteeUpdate::class,
+            [CheckUserUpdate::class, 'handleTrainingCommitteeUpdate']
+        );
     }
-
-    // public function handle(MemberUpdated $event): void
-    // {
-    //     /** GET CURRENT MODEL */
-    //     $biodata = $event->model;
-
-    //     /** CHECK EXISTS */
-    //     if (!$user = SystemUser::firstWhere('email', $biodata->nip)) {
-    //         /** CREATE NEW USER */
-    //         $user = SystemUser::createUserFromBiodata($biodata);
-    //     }
-
-    //     /**
-    //      * TODO:
-    //      * struktural eselon 1 theme = brown
-    //      * struktural eselon 2 theme = red
-    //      * struktural eselon 3 theme = blue
-    //      * struktural eselon 4 theme = green
-    //      * fungsional theme = blue-grey
-    //      * pelaksana theme = orange
-    //      */
-
-    //     /** UPDATE ABILITY */
-    //     SystemUser::updateAbility($user);
-
-    //     /** UPDATE AVATAR */
-    //     SystemUser::updateUserAvatar($user, $biodata->getBiodataPhoto());
-    // }
 }

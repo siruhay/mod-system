@@ -513,17 +513,39 @@ class SystemUser extends Authenticatable
 
         $rolemode = null;
 
-        switch ($source->position_id) {
-            case 16:
-                # KETUA | chairman
-                $rolemode = 'chairman';
-                break;
+        if ($source->position_id) {
+            switch ($source->position_id) {
+                case 16:
+                    # KETUA | chairman
+                    $rolemode = 'chairman';
+                    break;
 
-            default:
-                # member
-                $rolemode = 'member';
-                break;
+                default:
+                    # member
+                    $rolemode = 'member';
+                    break;
+            }
         }
+
+        if ($source->type) {
+            switch ($source->type) {
+                case 'CHAIRMAN':
+                    # KETUA | chairman
+                    $rolemode = 'committee-chairman';
+                    break;
+
+                case 'SPEAKER':
+                    # KETUA | chairman
+                    $rolemode = 'speaker';
+                    break;
+
+                default:
+                    # member
+                    $rolemode = 'committee-member';
+                    break;
+            }
+        }
+
 
         if ($role = SystemRole::with(['abilities'])->firstWhere('slug', $rolemode)) {
             foreach ($role->abilities as $ability) {
