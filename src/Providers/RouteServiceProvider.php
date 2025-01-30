@@ -42,7 +42,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes(): void
     {
-        Route::domain('backend.' . env('APP_URL'))
+        Route::domain(env('APP_URL'))
             ->middleware('web')
             ->prefix('account')
             ->namespace('Module\System\Http\Controllers')
@@ -64,7 +64,7 @@ class RouteServiceProvider extends ServiceProvider
             }
         });
 
-        Route::domain($domain . '.' . env('APP_URL'))
+        Route::domain($domain ? $domain . '.' . env('APP_URL') : env('APP_URL'))
             ->middleware('web')
             ->prefix($prefix)
             ->namespace('Module\System\Http\Controllers')
@@ -80,7 +80,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes(): void
     {
-        Route::domain('backend.' . env('APP_URL'))
+        Route::domain(env('APP_URL'))
             ->prefix('account/api')
             ->middleware(['api', 'auth:sanctum'])
             ->namespace('Module\System\Http\Controllers')
@@ -102,7 +102,7 @@ class RouteServiceProvider extends ServiceProvider
             }
         });
 
-        Route::domain($domain . '.' . env('APP_URL'))
+        Route::domain($domain ? $domain . '.' . env('APP_URL') : env('APP_URL'))
             ->prefix($prefix . '/api')
             ->middleware(['api', 'auth:sanctum'])
             ->namespace('Module\System\Http\Controllers')

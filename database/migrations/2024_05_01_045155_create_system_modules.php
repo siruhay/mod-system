@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('color', 25)->default('blue-grey');
             $table->string('highlight', 25)->default('white');
             $table->enum('type', ['account', 'administrator', 'personal'])->default('administrator');
-            $table->string('domain', 50)->index()->default('backend');
+            $table->string('domain', 50)->index()->nullable();
             $table->string('prefix', 50)->index()->nullable();
             $table->nullableMorphs('ownerable');
             $table->string('git_address')->nullable();
