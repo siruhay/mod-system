@@ -40,4 +40,6 @@ Route::delete('role/{systemRole}/force', [SystemRoleController::class, 'forceDel
 Route::put('role/{systemRole}/restore', [SystemRoleController::class, 'restore']);
 Route::resource('role', SystemRoleController::class)->parameters(['role' => 'systemRole']);
 
+Route::get('user/search', [SystemUserController::class, 'search']);
+Route::post('user/grant-permissions', [SystemUserController::class, 'grantPermissions']);
 Route::resource('user', SystemUserController::class)->parameters(['user' => 'systemUser']);

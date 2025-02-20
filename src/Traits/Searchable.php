@@ -32,10 +32,17 @@ trait Searchable
      */
     public function resolveRouteBinding($value, $field = null)
     {
+        if ($this->hasSoftDeleted()) {
+            return $this
+                ->withTrashed()
+                ->where($field ?? $this->getRouteKeyName(), $value)
+                ->first();
+        }
+
         return $this
-            ->withTrashed()
             ->where($field ?? $this->getRouteKeyName(), $value)
             ->first();
+        
     }
 
     /**

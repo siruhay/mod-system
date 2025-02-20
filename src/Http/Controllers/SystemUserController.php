@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Gate;
 use Module\System\Models\SystemUser;
 use Module\System\Http\Resources\RoleCollection;
 use Module\System\Http\Resources\RoleShowResource;
+use Module\System\Jobs\SystemGrantPermission;
 
 class SystemUserController extends Controller
 {
@@ -110,5 +111,45 @@ class SystemUserController extends Controller
         Gate::authorize('destroy', $systemUser);
 
         return SystemUser::destroyRecord($systemUser);
+    }
+
+    /**
+     * search function
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function search(Request $request)
+    {
+        return SystemUser::where('name', 'LIKE', '%' . $request->search . '%')
+            ->limit(10)
+            ->forCombo();
+    }
+
+    /**
+     * grantPermissions function
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function grantPermissions(Request $request)
+    {
+        try {
+            SystemUser::select('id', 'name')->chunk(100, function ($users) {
+                foreach ($users as $user) {
+                    SystemGrantPermission::dispatch($user->id);
+                }
+            });
+    
+            return response()->json([
+                'status'    => true,
+                'message'   => 'Grant all user permission has been completed.'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'    => false,
+                'message'   => $e->getMessage()
+            ], $e->getCode());
+        }
     }
 }

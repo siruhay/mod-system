@@ -25,6 +25,7 @@ class SystemAbilityLicenseController extends Controller
         return new LicenseCollection(
             $systemAbility
                 ->licenses()
+                ->with(['user'])
                 ->applyMode($request->trashed)
                 ->filter($request->filters)
                 ->search($request->findBy)

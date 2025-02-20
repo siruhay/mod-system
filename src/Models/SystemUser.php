@@ -9,7 +9,6 @@ use Module\System\Traits\CanRate;
 use Module\System\Traits\CanVote;
 use Module\System\Traits\HasMeta;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Module\System\Traits\Auditable;
 use Illuminate\Support\Facades\Hash;
 use Module\System\Traits\Filterable;

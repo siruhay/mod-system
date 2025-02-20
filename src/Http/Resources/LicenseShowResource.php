@@ -34,7 +34,7 @@ class LicenseShowResource extends JsonResource
 
                 'logs' => $request->activities && $this->activitylogs ? UserLogActivity::collection($this->activitylogs) : null,
 
-                'softdelete' => $this->trashed() ?: false,
+                'softdelete' => $this->hasSoftDeleted() ?: false,
 
                 'statuses' => SystemLicense::mapStatuses($request, $this),
 
