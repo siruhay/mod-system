@@ -14,7 +14,7 @@ return new class() extends Migration {
             $table->id();
             $table->string('name', 100)->index();
             $table->string('email', 50)->unique();
-            $table->enum('gender', ['male', 'female'])->default('male');
+            $table->enum('gender', ['male', 'female', 'oauth'])->default('male');
             $table->string('emailgov')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password', 100)->index();
