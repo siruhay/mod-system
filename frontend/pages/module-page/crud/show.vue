@@ -1,15 +1,14 @@
 <template>
-	<form-show
-		with-helpdesk
-		with-activity-logs
-	>
+	<form-show with-helpdesk with-activity-logs>
 		<template v-slot:default="{ record }">
 			<v-card-text>
 				<v-row>
 					<v-col cols="12">
 						<v-text-field
 							label="Parent"
-							v-model="record.parent_id"
+							v-model="
+								record.parent_id
+							"
 							hide-details
 							readonly
 						></v-text-field>
@@ -84,7 +83,9 @@
 		</template>
 
 		<template v-slot:info="{ theme }">
-			<div class="text-overline mt-4">Link</div>
+			<div class="text-overline mt-4">
+				Link
+			</div>
 			<v-divider></v-divider>
 
 			<v-btn
@@ -92,7 +93,11 @@
 				:color="theme"
 				block
 				variant="flat"
-				@click="$router.push({ name: 'system-permission' })"
+				@click="
+					$router.push({
+						name: 'system-permission',
+					})
+				"
 				>BUKA PERMISSION</v-btn
 			>
 		</template>

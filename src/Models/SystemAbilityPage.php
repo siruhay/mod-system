@@ -62,6 +62,27 @@ class SystemAbilityPage extends Model
     protected $defaultOrder = 'name';
 
     /**
+     * mapCombos function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapCombos(Request $request): array
+    {
+        $ability    = SystemAbility::find($request->segment(4));
+        
+        return [
+            'pages' => optional($ability->module)->pages()->whereNotExists(function ($query) use ($ability) {
+                $query
+                    ->select(DB::raw(1))
+                    ->from('system_ability_pages')
+                    ->where('module_id', $ability->module_id)
+                    ->whereColumn('system_pages.id', 'system_ability_pages.page_id');
+            })->forCombo()
+        ];
+    }
+
+    /**
      * getPageTitle function
      *
      * @param [type] $slug
@@ -70,6 +91,30 @@ class SystemAbilityPage extends Model
     public static function getPageTitle(Request $request, $slug): string | null
     {
         return SystemAbility::find($request->segment(4))->name;
+    }
+
+    /**
+     * mapHeaders function
+     *
+     * readonly value?: SelectItemKey<any>
+     * readonly title?: string | undefined
+     * readonly align?: 'start' | 'end' | 'center' | undefined
+     * readonly width?: string | number | undefined
+     * readonly minWidth?: string | undefined
+     * readonly maxWidth?: string | undefined
+     * readonly nowrap?: boolean | undefined
+     * readonly sortable?: boolean | undefined
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapHeaders(Request $request): array
+    {
+        return [
+            ['title' => 'Name', 'value' => 'name'],
+            ['title' => 'Module', 'value' => 'module_name'],
+            ['title' => 'Updated', 'value' => 'updated_at', 'sortable' => false, 'width' => '170'],
+        ];
     }
 
     /**
@@ -85,6 +130,7 @@ class SystemAbilityPage extends Model
             'name' => optional($model->page)->name,
             'ability_id' => $model->ability_id,
             'module_id' => $model->module_id,
+            'module_name' => optional($model->module)->name,
 
             'page_id' => $model->page_id,
             'page_parent' => optional(optional($model->page)->parent)->path ?: '/',
@@ -187,12 +233,18 @@ class SystemAbilityPage extends Model
      */
     public static function storeRecord(Request $request, SystemAbility $parent)
     {
-        $model = new static();
+        $model  = new static();
+        $page   = SystemPage::find($request->page_id);
+        $role   = $parent->role;
 
         DB::connection($model->connection)->beginTransaction();
 
         try {
-            // ...
+            $model->name = $page->slug;
+            $model->slug = $role->slug . '-' . $page->slug;
+            $model->module_id = $parent->module_id;
+            $model->page_id = $page->id;
+
             $parent->pages()->save($model);
 
             DB::connection($model->connection)->commit();
@@ -240,7 +292,8 @@ class SystemAbilityPage extends Model
                 }
 
                 $record = new SystemAbilityPermission();
-                $record->name = $permission['role'] . '-' . $permission['slug'];
+                $record->name = $permission['slug'];
+                $record->slug = $permission['role'] . '-' . $permission['slug'];
                 $record->ability_id = $model->ability_id;
                 $record->ability_page_id = $model->id;
                 $record->module_id = $model->module_id;

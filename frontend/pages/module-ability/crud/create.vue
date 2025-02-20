@@ -1,6 +1,11 @@
 <template>
 	<form-create with-helpdesk>
-		<template v-slot:default="{ combos: { modules, roles }, record }">
+		<template
+			v-slot:default="{
+				combos: { modules, roles },
+				record,
+			}"
+		>
 			<v-card-text>
 				<v-row dense>
 					<v-col cols="12">
@@ -8,7 +13,10 @@
 							:items="modules"
 							:return-object="false"
 							label="Module"
-							v-model="record.module_id"
+							v-model="
+								record.module_id
+							"
+							hide-details
 							readonly
 						></v-combobox>
 					</v-col>
@@ -18,7 +26,10 @@
 							:items="roles"
 							:return-object="false"
 							label="Role"
-							v-model="record.role_id"
+							v-model="
+								record.role_id
+							"
+							hide-details
 						></v-combobox>
 					</v-col>
 				</v-row>
@@ -27,8 +38,9 @@
 
 		<template v-slot:feed="{ theme }">
 			<span
-				>Form ini berfungsi untuk menambahkan data ability dari sebuah
-				module.</span
+				>Form ini berfungsi untuk
+				menambahkan data ability dari
+				sebuah module.</span
 			>
 
 			<help-list>

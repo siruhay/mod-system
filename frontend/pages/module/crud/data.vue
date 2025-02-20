@@ -1,5 +1,5 @@
 <template>
-	<form-data>
+	<form-data hide-addnew>
 		<template v-slot:feed></template>
 
 		<template v-slot:info></template>

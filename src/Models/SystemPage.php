@@ -13,6 +13,7 @@ use Module\System\Models\SystemModule;
 use Module\System\Traits\HasPageSetup;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Module\System\Http\Resources\PageResource;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -76,6 +77,27 @@ class SystemPage extends Model
     }
 
     /**
+     * mapRecordBase function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapRecordBase(Request $request): array
+    {
+        return [
+            'id' => null,
+            'name' => null,
+            'slug' => null,
+            'title' => null,
+            'icon' => null,
+            'path' => null,
+            'side' => false,
+            'dock' => false,
+            'enabled' => false,
+        ];
+    }
+
+    /**
      * mapResource function
      *
      * @param Request $request
@@ -90,6 +112,29 @@ class SystemPage extends Model
             'title' => $model->title,
             'icon' => $model->icon,
             'path' => $model->path,
+            'parent_name' => optional($model->parent)->path ?: '/',
+            'updated_at' => (string) $model->updated_at,
+        ];
+    }
+
+    /**
+     * mapShowResource function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapResourceShow(Request $request, $model): array
+    {
+        return [
+            'id' => $model->id,
+            'name' => $model->name,
+            'slug' => $model->slug,
+            'title' => $model->title,
+            'icon' => $model->icon,
+            'path' => $model->path,
+            'side' => $model->side,
+            'dock' => $model->dock,
+            'enabled' => $model->enabled,
             'parent_name' => optional($model->parent)->path ?: '/',
             'updated_at' => (string) $model->updated_at,
         ];
@@ -128,12 +173,20 @@ class SystemPage extends Model
         DB::connection($model->connection)->beginTransaction();
 
         try {
-            // ...
+            $model->name = $request->name;
+            $model->slug = $parent->slug . '-' . strtolower($request->name);
+            $model->title = $request->title;
+            $model->icon = $request->icon;
+            $model->path = $request->path;
+            $model->side = $request->side;
+            $model->dock = $request->dock;
+            $model->enabled = $request->enabled;
+
             $parent->pages()->save($model);
 
             DB::connection($model->connection)->commit();
 
-            // return new PageResource($model);
+            return new PageResource($model);
         } catch (\Exception $e) {
             DB::connection($model->connection)->rollBack();
 
@@ -153,15 +206,24 @@ class SystemPage extends Model
      */
     public static function updateRecord(Request $request, $model)
     {
+        $parent = $model->module;
+        
         DB::connection($model->connection)->beginTransaction();
 
         try {
-            // ...
+            $model->name = $request->name;
+            $model->slug = $parent->slug . '-' . strtolower($request->name);
+            $model->title = $request->title;
+            $model->icon = $request->icon;
+            $model->path = $request->path;
+            $model->side = $request->side;
+            $model->dock = $request->dock;
+            $model->enabled = $request->enabled;
             $model->save();
 
             DB::connection($model->connection)->commit();
 
-            // return new PageResource($model);
+            return new PageResource($model);
         } catch (\Exception $e) {
             DB::connection($model->connection)->rollBack();
 

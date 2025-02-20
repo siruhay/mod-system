@@ -11,6 +11,7 @@ use Module\System\Models\SystemModule;
 use Module\System\Traits\HasPageSetup;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Module\System\Http\Resources\AbilityResource;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -120,6 +121,16 @@ class SystemAbility extends Model
     }
 
     /**
+     * module function
+     *
+     * @return BelongsTo
+     */
+    public function module(): BelongsTo
+    {
+        return $this->belongsTo(SystemModule::class, 'module_id');
+    }
+
+    /**
      * The pages function
      *
      * @return HasMany
@@ -193,16 +204,19 @@ class SystemAbility extends Model
     public static function storeRecord(Request $request, SystemModule $parent)
     {
         $model = new static();
+        $role = SystemRole::find($request->role_id);
 
         DB::connection($model->connection)->beginTransaction();
 
         try {
-            // ...
+            $model->name = $parent->slug . '-' . optional($role)->slug;
+            $model->role_id = optional($role)->id;
+
             $parent->abilities()->save($model);
 
             DB::connection($model->connection)->commit();
 
-            // return new AbilityResource($model);
+            return new AbilityResource($model);
         } catch (\Exception $e) {
             DB::connection($model->connection)->rollBack();
 
@@ -222,15 +236,19 @@ class SystemAbility extends Model
      */
     public static function updateRecord(Request $request, $model)
     {
+        $module = $model->module;
+        $role = SystemRole::find($request->role_id);
+
         DB::connection($model->connection)->beginTransaction();
 
         try {
-            // ...
+            $model->name = $module->slug . '-' . optional($role)->slug;
+            $model->role_id = optional($role)->id;
             $model->save();
 
             DB::connection($model->connection)->commit();
 
-            // return new AbilityResource($model);
+            return new AbilityResource($model);
         } catch (\Exception $e) {
             DB::connection($model->connection)->rollBack();
 

@@ -3,14 +3,15 @@
 namespace Module\System\Models;
 
 use Illuminate\Http\Request;
-use Module\System\Traits\HasMeta;
 use Illuminate\Support\Facades\DB;
+use Module\System\Models\SystemPage;
 use Module\System\Traits\Filterable;
 use Module\System\Traits\Searchable;
 use Module\System\Traits\HasPageSetup;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Module\System\Models\SystemPage;
+use Module\System\Http\Resources\PermissionResource;
 
 class SystemPermission extends Model
 {
@@ -56,6 +57,76 @@ class SystemPermission extends Model
      */
     protected $defaultOrder = 'name';
 
+    // view, create, show, update, delete, restore, destroy
+    /**
+     * mapCombos function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapCombos(Request $request): array
+    {
+        return [
+            'permissions' => array_merge(array_diff(
+                ['view', 'create', 'show', 'update', 'delete', 'restore', 'destroy'],
+                SystemPage::find($request->segment(4))->permissions()->pluck('name')->toArray()
+            ))
+        ];
+    }
+
+    /**
+     * mapResource function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapResource(Request $request, $model): array
+    {
+        return [
+            'id' => $model->id,
+            'name' => $model->name,
+            'slug' => $model->slug,
+
+            'subtitle' => (string) $model->updated_at,
+            'updated_at' => (string) $model->updated_at,
+        ];
+    }
+
+    /**
+     * mapResourceShow function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function mapResourceShow(Request $request, $model): array
+    {
+        return [
+            'id' => $model->id,
+            'name' => $model->name,
+            'slug' => $model->slug
+        ];
+    }
+
+    /**
+     * page function
+     *
+     * @return BelongsTo
+     */
+    public function page(): BelongsTo
+    {
+        return $this->belongsTo(SystemPage::class, 'page_id');
+    }
+
+    /**
+     * module function
+     *
+     * @return BelongsTo
+     */
+    public function module(): BelongsTo
+    {
+        return $this->belongsTo(SystemModule::class, 'module_id');
+    }
+
     /**
      * The model store method
      *
@@ -69,12 +140,15 @@ class SystemPermission extends Model
         DB::connection($model->connection)->beginTransaction();
 
         try {
-            // ...
+            $model->name = $request->name;
+            $model->slug = $request->name . '-' . $parent->slug;
+            $model->module_id = $parent->module_id;
+
             $parent->permissions()->save($model);
 
             DB::connection($model->connection)->commit();
 
-            // return new PermissionResource($model);
+            return new PermissionResource($model);
         } catch (\Exception $e) {
             DB::connection($model->connection)->rollBack();
 
@@ -94,15 +168,18 @@ class SystemPermission extends Model
      */
     public static function updateRecord(Request $request, $model)
     {
+        $parent = $model->page;
+
         DB::connection($model->connection)->beginTransaction();
 
         try {
-            // ...
+            $model->name = $request->name;
+            $model->slug = $request->name . '-' . $parent->slug;
             $model->save();
 
             DB::connection($model->connection)->commit();
 
-            // return new PermissionResource($model);
+            return new PermissionResource($model);
         } catch (\Exception $e) {
             DB::connection($model->connection)->rollBack();
 
