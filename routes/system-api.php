@@ -45,4 +45,5 @@ Route::get('user/search', [SystemUserController::class, 'search']);
 Route::post('user/grant-permissions', [SystemUserController::class, 'grantPermissions']);
 Route::resource('user', SystemUserController::class)->parameters(['user' => 'systemUser']);
 
+Route::get('thirdparty/{systemThirdParty}/generate-token', [SystemThirdPartyController::class, 'generateToken']);
 Route::resource('thirdparty', SystemThirdPartyController::class)->parameters(['thirdparty' => 'systemThirdParty']);

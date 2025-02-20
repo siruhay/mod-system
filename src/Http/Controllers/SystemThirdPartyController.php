@@ -111,4 +111,18 @@ class SystemThirdPartyController extends Controller
 
         return SystemThirdParty::destroyRecord($systemThirdParty);
     }
+
+    /**
+     * generateToken function
+     *
+     * @param Request $request
+     * @param SystemThirdParty $systemThirdParty
+     * @return void
+     */
+    public function generateToken(Request $request, SystemThirdParty $systemThirdParty)
+    {
+        return response()->json([
+            'token' => optional($systemThirdParty->user)->generateToken()
+        ], 200);
+    }
 }

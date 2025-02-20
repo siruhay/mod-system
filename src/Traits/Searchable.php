@@ -4,6 +4,7 @@ namespace Module\System\Traits;
 
 use ReflectionMethod;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Builder;
 use Module\System\Attributes\SearchUsingPrefix;
 use Module\System\Attributes\SearchUsingFullText;

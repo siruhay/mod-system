@@ -371,15 +371,6 @@ export default {
 				},
 
 				{
-					path: ":thirdparty/edit",
-					name: "system-thirdparty-edit",
-					component: () =>
-						import(
-							/* webpackChunkName: "system" */ "@modules/system/frontend/pages/thirdparty/crud/edit.vue"
-						),
-				},
-
-				{
 					path: ":thirdparty/show",
 					name: "system-thirdparty-show",
 					component: () =>
