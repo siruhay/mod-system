@@ -1,6 +1,6 @@
 <template>
 	<form-data hide-addnew>
-		<template v-slot:info="{ record, theme }">
+		<template v-slot:info="{ theme }">
 			<div class="text-overline mt-4">
 				Aksi
 			</div>
