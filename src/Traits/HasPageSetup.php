@@ -122,6 +122,13 @@ trait HasPageSetup
      */
     public static function mapStatuses(Request $request): array
     {
-        return [];
+        return [
+            'canCreate' => true,
+            'canEdit' => true,
+            'canUpdate' => true,
+            'canDelete' => true,
+            'canRestore' => true,
+            'canDestroy' => true,
+        ];
     }
 }
