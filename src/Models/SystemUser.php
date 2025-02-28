@@ -277,49 +277,47 @@ class SystemUser extends Authenticatable
      */
     public function getModules(): array
     {
-        return Cache::flexible($this->id . '-modules', [60, 3600], function () {
-            $modules = with($this->licenses()->with([
-                'ability',
-                'ability.pages',
-                'ability.pages.page',
-                'ability.pages.page.parent',
-                'module'
-            ])->get())->reduce(function ($carry, $license) {
-                $module = optional($license)->module;
+        $modules = with($this->licenses()->with([
+            'ability',
+            'ability.pages',
+            'ability.pages.page',
+            'ability.pages.page.parent',
+            'module'
+        ])->get())->reduce(function ($carry, $license) {
+            $module = optional($license)->module;
 
-                if ((optional($module)->enabled && optional($module)->published) || (optional($module)->enabled && !optional($module)->published && $this->debuger)) {
-                    array_push($carry[$module->type], [
-                        'name' => $module->name,
-                        'slug' => $module->slug,
-                        'icon' => $module->icon,
-                        'color' => $module->color,
-                        'highlight' => $module->highlight,
-                        'domain' => $module->domain,
-                        'prefix' => $module->prefix,
-                        'desktop' => (bool) $module->desktop,
-                        'mobile' => (bool) $module->mobile,
-                        'order' => $module->_lft,
-                        'pages' => $this->getLicensePages($license->ability)
-                    ]);
-                }
+            if ((optional($module)->enabled && optional($module)->published) || (optional($module)->enabled && !optional($module)->published && $this->debuger)) {
+                array_push($carry[$module->type], [
+                    'name' => $module->name,
+                    'slug' => $module->slug,
+                    'icon' => $module->icon,
+                    'color' => $module->color,
+                    'highlight' => $module->highlight,
+                    'domain' => $module->domain,
+                    'prefix' => $module->prefix,
+                    'desktop' => (bool) $module->desktop,
+                    'mobile' => (bool) $module->mobile,
+                    'order' => $module->_lft,
+                    'pages' => $this->getLicensePages($license->ability)
+                ]);
+            }
 
-                return $carry;
-            }, [
-                'account' => [],
-                'administrator' => [],
-                'personal' => [],
-            ]);
+            return $carry;
+        }, [
+            'account' => [],
+            'administrator' => [],
+            'personal' => [],
+        ]);
 
-            usort($modules['administrator'], function ($a, $b) {
-                return $a['order'] - $b['order'];
-            });
-
-            usort($modules['personal'], function ($a, $b) {
-                return $a['order'] - $b['order'];
-            });
-
-            return $modules;
+        usort($modules['administrator'], function ($a, $b) {
+            return $a['order'] - $b['order'];
         });
+
+        usort($modules['personal'], function ($a, $b) {
+            return $a['order'] - $b['order'];
+        });
+
+        return $modules;
     }
 
     /**
