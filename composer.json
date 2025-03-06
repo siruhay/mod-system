@@ -13,8 +13,7 @@
 		"laravel/fortify": "^1.21",
 		"league/flysystem-aws-s3-v3": "^3.28",
 		"maatwebsite/excel": "^3.1",
-		"guzzlehttp/guzzle": "^7.2",
-		"monoland/starterkit": "@dev"
+		"guzzlehttp/guzzle": "^7.2"
 	},
 	"autoload": {
 		"files": [
