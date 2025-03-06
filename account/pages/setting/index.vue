@@ -49,10 +49,7 @@
 
 				<v-tabs-window v-model="tabSelected">
 					<v-tabs-window-item value="account">
-						<v-sheet
-							class="mx-auto"
-							max-width="400"
-						>
+						<v-sheet class="mx-auto" max-width="400">
 							<v-card-text>
 								<v-row>
 									<v-col cols="12">
@@ -105,35 +102,53 @@
 					</v-tabs-window-item>
 
 					<v-tabs-window-item value="password">
-						<v-sheet
-							class="mx-auto"
-							max-width="400"
-						>
+						<v-sheet class="mx-auto" max-width="400">
 							<v-card-text>
 								<v-row>
 									<v-col cols="12">
 										<v-text-field
+											:type="show1 ? 'text' : 'password'"
+											:append-inner-icon="
+												show1
+													? 'visibility'
+													: 'visibility_off'
+											"
 											label="Saat ini"
 											v-model="record.current_password"
 											hide-details
+											@click:append-inner="show1 = !show1"
 										></v-text-field>
 									</v-col>
 
 									<v-col cols="12">
 										<v-text-field
+											:type="show2 ? 'text' : 'password'"
+											:append-inner-icon="
+												show2
+													? 'visibility'
+													: 'visibility_off'
+											"
 											label="Sandi Baru"
 											v-model="record.password"
 											hide-details
+											@click:append-inner="show2 = !show2"
 										></v-text-field>
 									</v-col>
 
 									<v-col cols="12">
 										<v-text-field
+											:type="show3 ? 'text' : 'password'"
+											:append-inner-icon="
+												show3
+													? 'visibility'
+													: 'visibility_off'
+											"
 											label="Konfirmasi"
 											v-model="
 												record.password_confirmation
 											"
 											hide-details
+											@click:append-inner="show3 = !show3"
 										></v-text-field>
 									</v-col>
 								</v-row>
@@ -154,10 +169,7 @@
 					</v-tabs-window-item>
 
 					<v-tabs-window-item value="twofactor">
-						<v-sheet
-							class="mx-auto"
-							max-width="400"
-						>
+						<v-sheet class="mx-auto" max-width="400">
 							<v-card-text>
 								<div
 									v-if="
@@ -296,10 +308,7 @@
 					</v-tabs-window-item>
 
 					<v-tabs-window-item value="sessions">
-						<v-sheet
-							class="mx-auto"
-							max-width="400"
-						>
+						<v-sheet class="mx-auto" max-width="400">
 							<v-card-text>
 								<div class="text-grey-darken-1 mb-4">
 									<p>
@@ -381,10 +390,7 @@
 							<v-card-text class="d-flex pt-1">
 								<v-spacer></v-spacer>
 
-								<v-btn
-									:color="theme"
-									variant="flat"
-								>
+								<v-btn :color="theme" variant="flat">
 									Hapus Sesi Lainnya
 
 									<v-dialog
@@ -499,6 +505,9 @@ export default {
 		tabSelected: "account",
 		svgQrCode: null,
 		visible: false,
+		show1: false,
+		show2: false,
+		show3: false,
 	}),
 
 	methods: {
