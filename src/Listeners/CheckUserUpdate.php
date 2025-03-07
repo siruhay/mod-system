@@ -4,6 +4,7 @@ namespace Module\System\Listeners;
 
 use Illuminate\Events\Dispatcher;
 use Module\System\Models\SystemUser;
+use Module\Training\Events\TrainingSettingUpdate;
 use Module\Foundation\Events\TrainingMemberUpdated;
 use Module\Training\Events\TrainingCommitteeUpdate;
 use Module\Foundation\Events\TrainingOfficialUpdated;
@@ -122,6 +123,43 @@ class CheckUserUpdate
     }
 
     /**
+     * handleTrainingSettingUpdate function
+     *
+     * @param TrainingSettingUpdate $event
+     * @return void
+     */
+    public function handleTrainingSettingUpdate(TrainingSettingUpdate $event): void
+    {
+        /** GET CURRENT MODEL */
+        $committee = $event->model;
+
+        /** GET ABILITIES */
+        $abilities = $event->abilities;
+
+        if (!$committee->slug) {
+            return;
+        }
+
+        /** CHECK EXISTS */
+        if (!$user = SystemUser::firstWhere('email', $committee->slug)) {
+            /** CREATE NEW USER */
+            $user = SystemUser::createUserFromEvent($committee);
+        }
+
+        foreach ($abilities as $ability) {
+            if ($user->hasLicenseAs($ability)) {
+                continue;
+            }
+
+            $user->addLicense($ability);
+        }
+
+        if (!$user->hasLicenseAs('account-administrator')) {
+            $user->addLicense('account-administrator');
+        }
+    }
+
+    /**
      * subscribe function
      *
      * @param Dispatcher $events
@@ -142,6 +180,11 @@ class CheckUserUpdate
         $events->listen(
             TrainingCommitteeUpdate::class,
             [CheckUserUpdate::class, 'handleTrainingCommitteeUpdate']
+        );
+
+        $events->listen(
+            TrainingSettingUpdate::class,
+            [CheckUserUpdate::class, 'handleTrainingSettingUpdate']
         );
     }
 }
