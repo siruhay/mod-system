@@ -21,14 +21,30 @@ class CheckUserUpdate
         /** GET CURRENT MODEL */
         $member = $event->model;
 
+        /** GET ABILITIES */
+        $abilities = $event->abilities;
+
+        if (!$member->slug) {
+            return;
+        }
+
         /** CHECK EXISTS */
         if (!$user = SystemUser::firstWhere('email', $member->slug)) {
             /** CREATE NEW USER */
             $user = SystemUser::createUserFromEvent($member);
         }
 
-        /** UPDATE ABILITY */
-        SystemUser::updateAbility($user, $member);
+        foreach ($abilities as $ability) {
+            if ($user->hasLicenseAs($ability)) {
+                continue;
+            }
+
+            $user->addLicense($ability);
+        }
+
+        if (!$user->hasLicenseAs('account-administrator')) {
+            $user->addLicense('account-administrator');
+        }
     }
 
     /**
@@ -42,14 +58,30 @@ class CheckUserUpdate
         /** GET CURRENT MODEL */
         $official = $event->model;
 
+        /** GET ABILITIES */
+        $abilities = $event->abilities;
+
+        if (!$official->slug) {
+            return;
+        }
+
         /** CHECK EXISTS */
         if (!$user = SystemUser::firstWhere('email', $official->slug)) {
             /** CREATE NEW USER */
             $user = SystemUser::createUserFromEvent($official);
         }
 
-        /** UPDATE ABILITY */
-        SystemUser::updateAbility($user, $official);
+        foreach ($abilities as $ability) {
+            if ($user->hasLicenseAs($ability)) {
+                continue;
+            }
+
+            $user->addLicense($ability);
+        }
+
+        if (!$user->hasLicenseAs('account-administrator')) {
+            $user->addLicense('account-administrator');
+        }
     }
 
     /**
@@ -63,14 +95,30 @@ class CheckUserUpdate
         /** GET CURRENT MODEL */
         $committee = $event->model;
 
+        /** GET ABILITIES */
+        $abilities = $event->abilities;
+
+        if (!$committee->slug) {
+            return;
+        }
+
         /** CHECK EXISTS */
         if (!$user = SystemUser::firstWhere('email', $committee->slug)) {
             /** CREATE NEW USER */
             $user = SystemUser::createUserFromEvent($committee);
         }
 
-        /** UPDATE ABILITY */
-        SystemUser::updateAbility($user, $committee);
+        foreach ($abilities as $ability) {
+            if ($user->hasLicenseAs($ability)) {
+                continue;
+            }
+
+            $user->addLicense($ability);
+        }
+
+        if (!$user->hasLicenseAs('account-administrator')) {
+            $user->addLicense('account-administrator');
+        }
     }
 
     /**

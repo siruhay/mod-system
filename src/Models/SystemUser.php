@@ -134,11 +134,9 @@ class SystemUser extends Authenticatable
 
                 'modules' => $modules,
             ],
-
             $request->mobile ? [
                 'token' => $model->generateToken()
             ] : [],
-
             $request->session()->has('impersonate_source_id') ? [
                 'impersonated' => true
             ] : []
@@ -505,10 +503,10 @@ class SystemUser extends Authenticatable
     public static function createUserFromEvent(Model $source)
     {
         try {
-            $model = new static;
+            $model = new static();
             $model->name = $source->name;
             $model->email = $source->slug;
-            $model->password = Hash::make(env('DEFAULT_PASSWORD', 'SiruhayMantab'));
+            $model->password = Hash::make(env('DEFAULT_PASSWORD', 'SiRUHAYNGAGEBRAY'));
 
             $source->user()->save($model);
 
