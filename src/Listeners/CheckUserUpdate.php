@@ -3,6 +3,7 @@
 namespace Module\System\Listeners;
 
 use Illuminate\Events\Dispatcher;
+use Illuminate\Support\Facades\Artisan;
 use Module\System\Models\SystemUser;
 use Module\Training\Events\TrainingSettingUpdate;
 use Module\Foundation\Events\TrainingMemberUpdated;
@@ -46,6 +47,8 @@ class CheckUserUpdate
         if (!$user->hasLicenseAs('account-administrator')) {
             $user->addLicense('account-administrator');
         }
+
+        Artisan::call('cache:clear');
     }
 
     /**
@@ -83,6 +86,8 @@ class CheckUserUpdate
         if (!$user->hasLicenseAs('account-administrator')) {
             $user->addLicense('account-administrator');
         }
+
+        Artisan::call('cache:clear');
     }
 
     /**
@@ -120,6 +125,8 @@ class CheckUserUpdate
         if (!$user->hasLicenseAs('account-administrator')) {
             $user->addLicense('account-administrator');
         }
+
+        Artisan::call('cache:clear');
     }
 
     /**
@@ -157,6 +164,8 @@ class CheckUserUpdate
         if (!$user->hasLicenseAs('account-administrator')) {
             $user->addLicense('account-administrator');
         }
+
+        Artisan::call('cache:clear');
     }
 
     /**
