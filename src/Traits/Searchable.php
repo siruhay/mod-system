@@ -37,13 +37,13 @@ trait Searchable
             return $this
                 ->withTrashed()
                 ->where($field ?? $this->getRouteKeyName(), $value)
-                ->first();
+                ->first() ?? throw new \Exception('Model not found');
         }
 
         return $this
             ->where($field ?? $this->getRouteKeyName(), $value)
-            ->first();
-        
+            ->first() ?? throw new \Exception('Model not found');
+
     }
 
     /**
