@@ -85,7 +85,7 @@ class SystemRole extends Model
 
         try {
             $model->name = $request->name;
-            $model->slug = str($request->name)->slug();
+            $model->slug = str($request->slug)->slug();
             $model->save();
 
             DB::connection($model->connection)->commit();
@@ -114,7 +114,7 @@ class SystemRole extends Model
 
         try {
             $model->name = $request->name;
-            $model->slug = str($request->name)->slug();
+            $model->slug = str($request->slug)->slug();
             $model->save();
 
             DB::connection($model->connection)->commit();
