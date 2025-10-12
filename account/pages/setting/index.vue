@@ -14,20 +14,13 @@
 						size="small"
 						variant="flat"
 					>
-						<div
-							class="font-weight-medium text-caption text-uppercase"
-						>
+						<div class="font-weight-medium text-caption text-uppercase">
 							{{ tabTitle }}
 						</div>
 					</v-chip>
 				</div>
 
-				<v-tabs
-					align-tabs="center"
-					color="primary"
-					v-model="tabSelected"
-					stacked
-				>
+				<v-tabs align-tabs="center" color="primary" v-model="tabSelected" stacked>
 					<v-tab value="account">
 						<v-icon icon="person"></v-icon>
 					</v-tab>
@@ -109,9 +102,7 @@
 										<v-text-field
 											:type="show1 ? 'text' : 'password'"
 											:append-inner-icon="
-												show1
-													? 'visibility'
-													: 'visibility_off'
+												show1 ? 'visibility' : 'visibility_off'
 											"
 											label="Saat ini"
 											v-model="record.current_password"
@@ -124,9 +115,7 @@
 										<v-text-field
 											:type="show2 ? 'text' : 'password'"
 											:append-inner-icon="
-												show2
-													? 'visibility'
-													: 'visibility_off'
+												show2 ? 'visibility' : 'visibility_off'
 											"
 											label="Sandi Baru"
 											v-model="record.password"
@@ -139,14 +128,10 @@
 										<v-text-field
 											:type="show3 ? 'text' : 'password'"
 											:append-inner-icon="
-												show3
-													? 'visibility'
-													: 'visibility_off'
+												show3 ? 'visibility' : 'visibility_off'
 											"
 											label="Konfirmasi"
-											v-model="
-												record.password_confirmation
-											"
+											v-model="record.password_confirmation"
 											hide-details
 											@click:append-inner="show3 = !show3"
 										></v-text-field>
@@ -179,16 +164,15 @@
 									class="text-grey-darken-1"
 								>
 									<p class="text-justify">
-										Anda belum mengaktifkan fitur
-										otentifikasi dua langkah
+										Anda belum mengaktifkan fitur otentifikasi dua
+										langkah
 									</p>
 
 									<p class="mt-3 text-justify">
-										Saat fitur otentifikasi dua langkah di
-										aktifkan, Anda akan di minta untuk scan
-										kode QR dan meng-input token keamanan.
-										Anda akan mendapatkan token ini melalui
-										aplikasi Google Authenticator di
+										Saat fitur otentifikasi dua langkah di aktifkan,
+										Anda akan di minta untuk scan kode QR dan
+										meng-input token keamanan. Anda akan mendapatkan
+										token ini melalui aplikasi Google Authenticator di
 										handphone.
 									</p>
 								</div>
@@ -201,9 +185,8 @@
 									class="text-grey-darken-1"
 								>
 									<p class="text-justify">
-										Silahkan scan QR code di bawah
-										menggunakan aplikasi Google
-										Authenticator di handphone Anda.
+										Silahkan scan QR code di bawah menggunakan
+										aplikasi Google Authenticator di handphone Anda.
 									</p>
 
 									<div
@@ -212,9 +195,8 @@
 									></div>
 
 									<p class="text-justify">
-										Silahkan masukan token dari aplikasi
-										Google Authenticator untuk konfirmasi
-										aktivasi fitur ini.
+										Silahkan masukan token dari aplikasi Google
+										Authenticator untuk konfirmasi aktivasi fitur ini.
 									</p>
 
 									<div class="text-overline text-center">
@@ -236,16 +218,15 @@
 									class="text-grey-darken-1"
 								>
 									<p>
-										Fitur otentifikasi dua langkah sekarang
-										telah aktif.
+										Fitur otentifikasi dua langkah sekarang telah
+										aktif.
 									</p>
 
 									<p class="mt-3 text-justify">
-										Simpan kode pemulihan dibawah ini pada
-										tempat yang aman. Kode ini dapat di
-										gunakan untuk memulihkan kembali akses
-										dua langkah otentifikasi akun Anda jika
-										perangkat hilang.
+										Simpan kode pemulihan dibawah ini pada tempat yang
+										aman. Kode ini dapat di gunakan untuk memulihkan
+										kembali akses dua langkah otentifikasi akun Anda
+										jika perangkat hilang.
 									</p>
 
 									<div
@@ -277,9 +258,7 @@
 									"
 									:color="theme"
 									variant="flat"
-									@click="
-										confirmTwoFactorAuthentication(record)
-									"
+									@click="confirmTwoFactorAuthentication(record)"
 									>konfirmasi</v-btn
 								>
 
@@ -288,9 +267,7 @@
 									color="deep-orange"
 									class="ml-2"
 									variant="flat"
-									@click="
-										disableTwoFactorAuthentication(record)
-									"
+									@click="disableTwoFactorAuthentication(record)"
 									>hapus</v-btn
 								>
 
@@ -298,9 +275,7 @@
 									v-if="!record.enabled_two_factor"
 									:color="theme"
 									variant="flat"
-									@click="
-										enableTwoFactorAuthentication(record)
-									"
+									@click="enableTwoFactorAuthentication(record)"
 									>Aktifkan Fitur</v-btn
 								>
 							</v-card-text>
@@ -312,17 +287,15 @@
 							<v-card-text>
 								<div class="text-grey-darken-1 mb-4">
 									<p>
-										Jika diperlukan, Anda dapat keluar dari
-										semua sesi di semua device yang pernah
-										terhubung.
+										Jika diperlukan, Anda dapat keluar dari semua sesi
+										di semua device yang pernah terhubung.
 									</p>
 
 									<p class="mt-3">
-										list dibawah ini adalah beberapa sesi
-										terbaru Anda. Daftar ini mungkin tidak
-										lengkap, jika Anda merasa bahwa akun
-										Anda telah disusupi. Anda juga harus
-										meng-update Katasandi.
+										list dibawah ini adalah beberapa sesi terbaru
+										Anda. Daftar ini mungkin tidak lengkap, jika Anda
+										merasa bahwa akun Anda telah disusupi. Anda juga
+										harus meng-update Katasandi.
 									</p>
 								</div>
 
@@ -336,38 +309,29 @@
 										<v-icon v-if="session.agent.is_mobile"
 											>phone_iphone</v-icon
 										>
-										<v-icon
-											v-else-if="session.agent.is_tablet"
+										<v-icon v-else-if="session.agent.is_tablet"
 											>tablet_mac</v-icon
 										>
 										<v-icon v-else>computer</v-icon>
 
 										<div class="d-block flex-grow-1 mx-2">
-											<div
-												class="text-caption font-weight-bold"
-											>
+											<div class="text-caption font-weight-bold">
 												{{ session.agent.platform }} -
 												{{ session.agent.browser }}
 											</div>
 											<div
 												class="text-caption"
-												style="
-													font-size: 10px !important;
-												"
+												style="font-size: 10px !important"
 											>
 												IP: {{ session.ip_address }},
 												<span
 													class="text-green"
-													v-if="
-														session.is_current_device
-													"
+													v-if="session.is_current_device"
 													>This device</span
 												>
 												<span v-else
 													>Last activity:
-													{{
-														session.last_active
-													}}</span
+													{{ session.last_active }}</span
 												>
 											</div>
 										</div>
@@ -393,10 +357,7 @@
 								<v-btn :color="theme" variant="flat">
 									Hapus Sesi Lainnya
 
-									<v-dialog
-										activator="parent"
-										max-width="340"
-									>
+									<v-dialog activator="parent" max-width="340">
 										<template v-slot:default="{ isActive }">
 											<v-card
 												prepend-icon="delete"
@@ -406,11 +367,9 @@
 													<p
 														class="text-caption text-justify mb-4"
 													>
-														Untuk menghapus sesi
-														browser yang lain,
-														silahkan masukan
-														katasandi Anda pada
-														input di bawah ini.
+														Untuk menghapus sesi browser yang
+														lain, silahkan masukan katasandi
+														Anda pada input di bawah ini.
 													</p>
 
 													<v-row>
@@ -428,13 +387,10 @@
 																"
 																label="Katasandi"
 																placeholder="Masukan Katasandi"
-																v-model="
-																	record.password
-																"
+																v-model="record.password"
 																hide-details
 																@click:append-inner="
-																	visible =
-																		!visible
+																	visible = !visible
 																"
 															></v-text-field>
 														</v-col>
@@ -447,9 +403,7 @@
 													<v-btn
 														:color="theme"
 														text="Batal"
-														@click="
-															isActive.value = false
-														"
+														@click="isActive.value = false"
 													></v-btn>
 
 													<v-btn

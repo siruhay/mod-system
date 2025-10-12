@@ -5,21 +5,13 @@
 				<v-row dense>
 					<v-col cols="6">
 						<widget-card>
-							<apexchart
-								type="donut"
-								:options="{ legend: { show: false } }"
-								:series="[44, 55, 13, 33]"
-							></apexchart>
+							<div class="text-overline">pelatihan ku</div>
 						</widget-card>
 					</v-col>
 
 					<v-col cols="6">
 						<widget-card>
-							<apexchart
-								type="donut"
-								:options="{ legend: { show: false } }"
-								:series="[44, 55, 13]"
-							></apexchart>
+							<div class="text-overline">posyandu ku</div>
 						</widget-card>
 					</v-col>
 
