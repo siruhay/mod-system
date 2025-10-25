@@ -20,7 +20,9 @@ class AbilityPermissionImport implements ToCollection, WithHeadingRow
      * @param [type] $command
      * @param string $mode
      */
-    public function __construct(protected $command) {}
+    public function __construct(protected $command)
+    {
+    }
 
     /**
     * @param Collection $rows
@@ -39,17 +41,17 @@ class AbilityPermissionImport implements ToCollection, WithHeadingRow
                 continue;
             }
 
-            $abilities = $row['role'] === '*' ? 
+            $abilities = $row['role'] === '*' ?
                 with(SystemModule::firstWhere('slug', $row['module']))->abilities->pluck('name') :
                 $this->mapRoleToArray($row);
 
             $permissions = $row['permission'] === '*' ?
-                with(SystemPage::firstWhere('slug', $row['page']))->permissions->pluck('slug') : 
+                with(SystemPage::firstWhere('slug', $row['page']))->permissions->pluck('slug') :
                 $this->mapPermissionToArray($row);
 
             foreach ($abilities as $abilityName) {
                 $ability = SystemAbility::with(['role'])->firstWhere('name', $abilityName);
-                
+
                 if (!$ability) {
                     continue;
                 }
@@ -91,7 +93,7 @@ class AbilityPermissionImport implements ToCollection, WithHeadingRow
     protected function mapRoleToArray($row): array
     {
         return array_map(function ($role) use ($row) {
-            return $row['module'] . '-' . trim($role);
+            return str($row['module'] . '-' . trim($role))->slug()->toString();
         }, str($row['role'])->explode(',')->toArray());
     }
 
@@ -104,7 +106,7 @@ class AbilityPermissionImport implements ToCollection, WithHeadingRow
     protected function mapPermissionToArray($row): array
     {
         return array_map(function ($permission) use ($row) {
-            return trim($permission) . '-' . $row['page'];
+            return str(trim($permission) . '-' . $row['page'])->slug()->toString();
         }, str($row['permission'])->explode(',')->toArray());
     }
 }

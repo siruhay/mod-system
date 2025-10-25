@@ -18,7 +18,9 @@ class AbilityPageImport implements ToCollection, WithHeadingRow
      * @param [type] $command
      * @param string $mode
      */
-    public function __construct(protected $command) {}
+    public function __construct(protected $command)
+    {
+    }
 
     /**
     * @param Collection $rows
@@ -37,13 +39,13 @@ class AbilityPageImport implements ToCollection, WithHeadingRow
                 continue;
             }
 
-            $abilities = $row['role'] === '*' ? 
+            $abilities = $row['role'] === '*' ?
                 with(SystemModule::firstWhere('slug', $row['module']))->abilities->pluck('name') :
                 $this->mapRoleToArray($row);
 
             foreach ($abilities as $abilityName) {
                 $ability = SystemAbility::with(['role'])->firstWhere('name', $abilityName);
-                
+
                 if (!$ability) {
                     continue;
                 }
@@ -70,7 +72,7 @@ class AbilityPageImport implements ToCollection, WithHeadingRow
     protected function mapRoleToArray($row): array
     {
         return array_map(function ($role) use ($row) {
-            return $row['module'] . '-' . trim($role);
+            return str($row['module'] . '-' . trim($role))->slug()->toString();
         }, str($row['role'])->explode(',')->toArray());
     }
 }

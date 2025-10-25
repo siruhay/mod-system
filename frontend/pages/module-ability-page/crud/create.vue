@@ -1,11 +1,6 @@
 <template>
 	<form-create with-helpdesk>
-		<template
-			v-slot:default="{
-				combos: { pages },
-				record,
-			}"
-		>
+		<template v-slot:default="{ combos: { pages }, record, theme }">
 			<v-card-text>
 				<v-select
 					:items="pages"
@@ -16,16 +11,8 @@
 
 			<div class="py-0">
 				<v-divider>
-					<v-chip
-						:color="`${theme}`"
-						size="small"
-						variant="flat"
-					>
-						<div
-							class="font-weight-medium text-lowercase"
-						>
-							permissions
-						</div>
+					<v-chip :color="`${theme}`" size="small" variant="flat">
+						<div class="font-weight-medium text-lowercase">permissions</div>
 					</v-chip>
 				</v-divider>
 			</div>
@@ -43,34 +30,22 @@
 
 					<tbody>
 						<tr
-							v-for="(
-								permission, index
-							) in record.permissions"
+							v-for="(permission, index) in record.permissions"
 							:key="index"
 						>
 							<td>
 								<v-checkbox-btn
-									:model-value="
-										permission.value
-									"
+									:model-value="permission.value"
 									readonly
 								></v-checkbox-btn>
 							</td>
 
-							<td
-								class="text-caption font-weight-bold"
-							>
-								{{
-									permission.name
-								}}
+							<td class="text-caption font-weight-bold">
+								{{ permission.name }}
 							</td>
 
-							<td
-								class="text-caption"
-							>
-								{{
-									permission.slug
-								}}
+							<td class="text-caption">
+								{{ permission.slug }}
 							</td>
 						</tr>
 					</tbody>

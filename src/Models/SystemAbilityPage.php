@@ -70,12 +70,13 @@ class SystemAbilityPage extends Model
     public static function mapCombos(Request $request): array
     {
         $ability    = SystemAbility::find($request->segment(4));
-        
+
         return [
             'pages' => optional($ability->module)->pages()->whereNotExists(function ($query) use ($ability) {
                 $query
                     ->select(DB::raw(1))
                     ->from('system_ability_pages')
+                    ->where('ability_id', $ability->id)
                     ->where('module_id', $ability->module_id)
                     ->whereColumn('system_pages.id', 'system_ability_pages.page_id');
             })->forCombo()
@@ -135,7 +136,8 @@ class SystemAbilityPage extends Model
             'page_id' => $model->page_id,
             'page_parent' => optional(optional($model->page)->parent)->path ?: '/',
             'page_path' => optional($model->page)->path,
-            
+            'permissions' => [],
+
             'updated_at' => (string) $model->updated_at,
         ];
     }
@@ -157,8 +159,8 @@ class SystemAbilityPage extends Model
             'page_id' => $model->page_id,
             'page_name' => optional($model->page)->name,
             'permissions' => static::mapPermissions(
-                optional(optional($model->ability)->role)->slug, 
-                $model->page->permissions, 
+                optional(optional($model->ability)->role)->slug,
+                $model->page->permissions,
                 $model->permissions
             ),
             'updated_at' => (string) $model->updated_at,

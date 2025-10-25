@@ -207,7 +207,7 @@ class SystemPage extends Model
     public static function updateRecord(Request $request, $model)
     {
         $parent = $model->module;
-        
+
         DB::connection($model->connection)->beginTransaction();
 
         try {
