@@ -164,9 +164,9 @@ class SystemLicense extends Model
         DB::connection($model->connection)->beginTransaction();
 
         try {
-            $model->name = $parent->slug;
+            $model->name = $parent->name;
             $model->module_id = $parent->module_id;
-            $model->user_id = $parent->user_id;
+            $model->user_id = $request->user_id;
 
             $parent->licenses()->save($model);
 
@@ -193,7 +193,7 @@ class SystemLicense extends Model
     public static function updateRecord(Request $request, $model)
     {
         $parent = $model->ability;
-        
+
         DB::connection($model->connection)->beginTransaction();
 
         try {

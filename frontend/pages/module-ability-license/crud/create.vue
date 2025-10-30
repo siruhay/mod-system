@@ -1,21 +1,13 @@
 <template>
 	<form-create with-helpdesk>
-		<template
-			v-slot:default="{
-				combos: { users },
-				record,
-				store,
-			}"
-		>
+		<template v-slot:default="{ combos: { users }, record, store }">
 			<v-card-text>
 				<v-autocomplete
 					:items="users"
 					:return-object="false"
 					label="Pengguna"
-					v-model="record.name"
-					@update:search="
-						searchUser($event, store)
-					"
+					v-model="record.user_id"
+					@update:search="searchUser($event, store)"
 					clearable
 				></v-autocomplete>
 			</v-card-text>
@@ -30,10 +22,7 @@ export default {
 	name: "system-role-create",
 
 	methods: {
-		searchUser: debounce(function (
-			val,
-			store
-		) {
+		searchUser: debounce(function (val, store) {
 			if (!val) {
 				return;
 			}
@@ -46,8 +35,7 @@ export default {
 			}).then((results) => {
 				store.combos.users = results;
 			});
-		},
-		300),
+		}, 300),
 	},
 };
 </script>
