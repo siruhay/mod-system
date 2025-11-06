@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Module\System\Supports\AuditMigration;
 
-return new class() extends AuditMigration {
+return new class () extends AuditMigration {
     /**
      * Run the migrations.
      */
